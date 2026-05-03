@@ -1,0 +1,206 @@
+vocabulary: "1.0.0"
+
+info:
+  provider: "Weave Net"
+  description: "Vocabulary for Weave Net container networking covering IPAM, peer management, DNS, and network status."
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+operational:
+  apis:
+    - name: "Weave Net HTTP API"
+      namespace: weave-net
+      version: "2.0.0"
+      baseUrl: http://127.0.0.1:6784
+      status: active
+
+  resources:
+    - name: status
+      api: weave-net
+      description: "Daemon status including router, IPAM, and DNS state"
+      actions: [get]
+    - name: peers
+      api: weave-net
+      description: "Remote Weave peer connections"
+      actions: [connect, remove]
+    - name: ip-allocations
+      api: weave-net
+      description: "IP address allocations for containers"
+      actions: [allocate, lookup, claim, release]
+    - name: default-subnet
+      api: weave-net
+      description: "Default IPAM subnet configuration"
+      actions: [get]
+    - name: dns-domain
+      api: weave-net
+      description: "WeaveDNS domain configuration"
+      actions: [get]
+    - name: dns-registrations
+      api: weave-net
+      description: "Container DNS name registrations in WeaveDNS"
+      actions: [register, deregister]
+    - name: network-exposure
+      api: weave-net
+      description: "Host network bridge exposure"
+      actions: [expose]
+
+  actions:
+    - name: get
+      httpMethod: GET
+      pattern: read
+    - name: allocate
+      httpMethod: POST
+      pattern: write
+    - name: lookup
+      httpMethod: GET
+      pattern: read
+    - name: claim
+      httpMethod: PUT
+      pattern: write
+    - name: release
+      httpMethod: DELETE
+      pattern: destructive
+    - name: connect
+      httpMethod: POST
+      pattern: write
+    - name: remove
+      httpMethod: DELETE
+      pattern: destructive
+    - name: register
+      httpMethod: PUT
+      pattern: write
+    - name: deregister
+      httpMethod: DELETE
+      pattern: destructive
+    - name: expose
+      httpMethod: POST
+      pattern: write
+
+  schemas:
+    core:
+      - name: StatusResponse
+        description: "Weave Net daemon status"
+        keyProperties: [version, router, ipam, dns]
+      - name: RouterStatus
+        description: "Router subsystem status"
+        keyProperties: [encryption, peers, connections]
+      - name: PeerInfo
+        description: "Remote peer information"
+        keyProperties: [name, nick_name, connections]
+      - name: IPAMStatus
+        description: "IP address management status"
+        keyProperties: [status, subnet, range_num_ips, owned_num_ips]
+      - name: DNSStatus
+        description: "WeaveDNS status"
+        keyProperties: [domain, upstream]
+      - name: ConnectionInfo
+        description: "Peer connection details"
+        keyProperties: [address, state, info]
+
+  parameters:
+    identifiers:
+      - name: containerId
+        type: string
+        description: "Container identifier used for IP allocation and DNS registration"
+      - name: peerName
+        type: string
+        description: "Peer name or address for removal"
+    network:
+      - name: cidr
+        type: string
+        description: "IP address and subnet in CIDR notation"
+      - name: subnet
+        type: string
+        description: "Target subnet for IPAM allocation"
+      - name: ip
+        type: string
+        description: "IP address for DNS registration"
+    behavior:
+      - name: check-alive
+        type: boolean
+        description: "Check container liveness before IP allocation"
+      - name: replace
+        type: boolean
+        description: "Replace all existing peers when connecting"
+
+  enums:
+    ipam-status:
+      - ready
+      - initializing
+      - seeding
+    connection-state:
+      - established
+      - connecting
+      - failed
+      - closed
+
+  authentication: []
+
+capability:
+  workflows:
+    - name: Container Networking
+      file: capabilities/container-networking.yaml
+      description: "Weave Net container networking management including IPAM, peers, and DNS"
+      apisUsed: [weave-net]
+      toolCount: 9
+      personas: [DevOps Engineer, Platform Operator, Container Administrator]
+      domains: [Container Networking, IPAM, DNS Management]
+
+  personas:
+    - id: devops-engineer
+      name: DevOps Engineer
+      description: "Automates container network provisioning in CI/CD pipelines"
+      workflows: [Container Networking]
+    - id: platform-operator
+      name: Platform Operator
+      description: "Manages Weave Net cluster topology and peer connections"
+      workflows: [Container Networking]
+    - id: container-admin
+      name: Container Administrator
+      description: "Manages container IP allocations and DNS registrations"
+      workflows: [Container Networking]
+
+  domains:
+    - name: Container Networking
+      description: "Overlay network management for containers"
+      resources: [peers, network-exposure]
+    - name: IPAM
+      description: "IP address management for containers"
+      resources: [ip-allocations, default-subnet]
+    - name: DNS Management
+      description: "Container DNS name resolution via WeaveDNS"
+      resources: [dns-domain, dns-registrations]
+
+  namespaces:
+    - name: weave-net
+      type: consumed
+      baseUri: http://127.0.0.1:6784
+    - name: container-networking-api
+      type: rest-exposed
+      port: 8082
+    - name: container-networking-mcp
+      type: mcp-exposed
+      port: 9092
+
+  binds:
+    - name: WEAVE_NET_HOST
+      description: "Weave Net daemon host address (default: 127.0.0.1:6784)"
+      workflows: [Container Networking]
+
+crossReference:
+  - resource: status
+    operations: [get-status]
+    workflows: [Container Networking]
+    personas: [DevOps Engineer, Platform Operator, Container Administrator]
+  - resource: peers
+    operations: [connect-peer, remove-peer]
+    workflows: [Container Networking]
+    personas: [Platform Operator]
+  - resource: ip-allocations
+    operations: [allocate-ip, lookup-ip, claim-ip, release-ips]
+    workflows: [Container Networking]
+    personas: [DevOps Engineer, Container Administrator]
+  - resource: dns-registrations
+    operations: [register-dns, deregister-dns]
+    workflows: [Container Networking]
+    personas: [DevOps Engineer, Container Administrator]

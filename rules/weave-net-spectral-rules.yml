@@ -1,0 +1,196 @@
+rules:
+
+  # INFO / METADATA
+  info-title-required:
+    description: Info must have a title
+    severity: error
+    given: $.info
+    then:
+      field: title
+      function: truthy
+
+  info-description-required:
+    description: Info must have a description
+    severity: warn
+    given: $.info
+    then:
+      field: description
+      function: truthy
+
+  info-version-required:
+    description: Info must have a version
+    severity: error
+    given: $.info
+    then:
+      field: version
+      function: truthy
+
+  info-contact-recommended:
+    description: Info should have contact information
+    severity: info
+    given: $.info
+    then:
+      field: contact
+      function: truthy
+
+  info-license-required:
+    description: Info should have license information
+    severity: warn
+    given: $.info
+    then:
+      field: license
+      function: truthy
+
+  # OPENAPI VERSION
+  openapi-version-3:
+    description: Must use OpenAPI 3.x
+    severity: error
+    given: $
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        match: "^3\\."
+
+  # SERVERS
+  servers-required:
+    description: Servers must be defined
+    severity: error
+    given: $
+    then:
+      field: servers
+      function: truthy
+
+  servers-description-required:
+    description: Server entries should have descriptions
+    severity: info
+    given: $.servers[*]
+    then:
+      field: description
+      function: truthy
+
+  # OPERATIONS
+  operation-operationId-required:
+    description: Every operation must have an operationId
+    severity: error
+    given: $.paths[*][get,post,put,delete,patch]
+    then:
+      field: operationId
+      function: truthy
+
+  operation-operationId-camel-case:
+    description: OperationIds must use camelCase
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch].operationId
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+
+  operation-summary-required:
+    description: Every operation must have a summary
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch]
+    then:
+      field: summary
+      function: truthy
+
+  operation-summary-weave-net-prefix:
+    description: Operation summaries must start with 'Weave Net'
+    severity: info
+    given: $.paths[*][get,post,put,delete,patch].summary
+    then:
+      function: pattern
+      functionOptions:
+        match: "^Weave Net"
+
+  operation-description-required:
+    description: Operations should have descriptions
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch]
+    then:
+      field: description
+      function: truthy
+
+  operation-tags-required:
+    description: Operations must have at least one tag
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch]
+    then:
+      field: tags
+      function: truthy
+
+  # PARAMETERS
+  parameter-description-required:
+    description: Parameters should have descriptions
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch].parameters[*]
+    then:
+      field: description
+      function: truthy
+
+  parameter-schema-required:
+    description: Parameters must have a schema
+    severity: error
+    given: $.paths[*][get,post,put,delete,patch].parameters[*]
+    then:
+      field: schema
+      function: truthy
+
+  # RESPONSES
+  response-success-required:
+    description: Every operation must have a success response
+    severity: error
+    given: $.paths[*][get,post,put,delete,patch].responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          minProperties: 1
+
+  response-description-required:
+    description: Every response must have a description
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch].responses[*]
+    then:
+      field: description
+      function: truthy
+
+  # HTTP METHOD CONVENTIONS
+  get-no-request-body:
+    description: GET operations must not have a request body
+    severity: error
+    given: $.paths[*].get
+    then:
+      field: requestBody
+      function: falsy
+
+  delete-returns-correct-status:
+    description: DELETE operations should return 204 or 200
+    severity: info
+    given: $.paths[*].delete.responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+            - required: ['204']
+            - required: ['200']
+
+  # SCHEMAS
+  schema-properties-described:
+    description: Schema properties should have descriptions
+    severity: info
+    given: $.components.schemas[*].properties[*]
+    then:
+      field: description
+      function: truthy
+
+  # MICROCKS EXTENSIONS
+  operation-microcks-extension:
+    description: Operations should have x-microcks-operation for mock support
+    severity: info
+    given: $.paths[*][get,post,put,delete,patch]
+    then:
+      field: x-microcks-operation
+      function: truthy

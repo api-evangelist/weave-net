@@ -1,0 +1,6 @@
+{
+  "status": "ready",
+  "subnet": "10.32.0.0/12",
+  "range_num_ips": 1048576,
+  "owned_num_ips": 524288
+}

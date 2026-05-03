@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/json-schema/weave-net-peer-info-schema.json",
+  "title": "PeerInfo",
+  "description": "Information about a Weave peer",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Peer name (hex string)",
+      "example": "8a:3d:c1:f9:a2:b7"
+    },
+    "nick_name": {
+      "type": "string",
+      "description": "Human-readable peer nickname",
+      "example": "node-1"
+    },
+    "connections": {
+      "type": "array",
+      "description": "List of connections from this peer",
+      "items": {
+        "$ref": "#/components/schemas/ConnectionInfo"
+      }
+    }
+  }
+}

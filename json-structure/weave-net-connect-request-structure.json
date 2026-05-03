@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/json-structure/weave-net-connect-request-structure.json",
+  "name": "ConnectRequest",
+  "description": "Request to connect to a peer",
+  "type": "object",
+  "properties": {
+    "peer": {
+      "type": "string",
+      "description": "Peer address or hostname",
+      "example": "10.0.1.5"
+    },
+    "replace": {
+      "type": "string",
+      "description": "Whether to replace all existing peers",
+      "enum": [
+        "true",
+        "false"
+      ],
+      "example": "false"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/json-schema/weave-net-status-response-schema.json",
+  "title": "StatusResponse",
+  "description": "Current status of the Weave Net daemon",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Weave Net version",
+      "example": "2.8.1"
+    },
+    "router": {
+      "$ref": "#/components/schemas/RouterStatus"
+    },
+    "ipam": {
+      "$ref": "#/components/schemas/IPAMStatus"
+    },
+    "dns": {
+      "$ref": "#/components/schemas/DNSStatus"
+    }
+  }
+}

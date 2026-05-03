@@ -1,0 +1,266 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Weave Net HTTP API"
+  description: "The Weave Net local HTTP API for managing container networking including IPAM, peer connections, DNS, and network exposure."
+  tags:
+    - Containers
+    - Networking
+    - Kubernetes
+    - IPAM
+    - DNS
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      WEAVE_NET_HOST: WEAVE_NET_HOST
+
+capability:
+  consumes:
+    - type: http
+      namespace: weave-net
+      baseUri: http://127.0.0.1:6784
+      description: "Weave Net daemon HTTP API for container network management."
+      resources:
+        - name: status
+          path: /status
+          description: "Daemon status and health"
+          operations:
+            - name: get-status
+              method: GET
+              description: "Get Weave Net daemon status"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: peers
+          path: /connect
+          description: "Peer connection management"
+          operations:
+            - name: connect-peer
+              method: POST
+              description: "Connect to a remote Weave peer"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: ipam
+          path: /ip
+          description: "IP address allocation management"
+          operations:
+            - name: lookup-ip
+              method: GET
+              description: "Look up allocated IP for a container"
+              inputParameters:
+                - name: containerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Container identifier"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: string
+                  value: "$."
+            - name: allocate-ip
+              method: POST
+              description: "Allocate an IP address for a container"
+              inputParameters:
+                - name: containerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Container identifier"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: string
+                  value: "$."
+            - name: release-ips
+              method: DELETE
+              description: "Release all IPs for a container"
+              inputParameters:
+                - name: containerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Container identifier"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: default-subnet
+          path: /ipinfo/defaultsubnet
+          description: "Default subnet information"
+          operations:
+            - name: get-default-subnet
+              method: GET
+              description: "Get the default IPAM subnet"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: string
+                  value: "$."
+
+        - name: dns
+          path: /domain
+          description: "WeaveDNS domain management"
+          operations:
+            - name: get-dns-domain
+              method: GET
+              description: "Get the WeaveDNS domain"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: string
+                  value: "$."
+            - name: register-dns
+              method: PUT
+              description: "Register a DNS name for a container"
+              inputParameters:
+                - name: containerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Container identifier"
+                - name: ip
+                  in: path
+                  type: string
+                  required: true
+                  description: "Container IP address"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deregister-dns
+              method: DELETE
+              description: "Deregister a DNS name for a container"
+              inputParameters:
+                - name: containerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Container identifier"
+                - name: ip
+                  in: path
+                  type: string
+                  required: true
+                  description: "Container IP address"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8102
+      namespace: weave-net-rest
+      resources:
+        - path: /v1/status
+          name: status
+          operations:
+            - method: GET
+              name: get-status
+              description: "Get Weave Net daemon status"
+              call: "weave-net.get-status"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/ipam/allocate
+          name: ipam-allocate
+          operations:
+            - method: POST
+              name: allocate-ip
+              description: "Allocate IP for a container"
+              call: "weave-net.allocate-ip"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9102
+      namespace: weave-net-mcp
+      transport: http
+      tools:
+        - name: get-daemon-status
+          description: "Get status of the Weave Net daemon"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "weave-net.get-status"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: connect-peer
+          description: "Connect to a remote Weave Net peer"
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "weave-net.connect-peer"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: allocate-ip
+          description: "Allocate an IP address for a container"
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "weave-net.allocate-ip"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: lookup-ip
+          description: "Look up the IP address for a container"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "weave-net.lookup-ip"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: release-ips
+          description: "Release all IP addresses for a container"
+          hints:
+            readOnly: false
+            destructive: true
+          call: "weave-net.release-ips"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-default-subnet
+          description: "Get the default IPAM subnet"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "weave-net.get-default-subnet"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: register-dns
+          description: "Register a DNS name for a container"
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "weave-net.register-dns"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: deregister-dns
+          description: "Deregister a DNS name for a container"
+          hints:
+            readOnly: false
+            destructive: true
+          call: "weave-net.deregister-dns"
+          outputParameters:
+            - type: object
+              mapping: "$."

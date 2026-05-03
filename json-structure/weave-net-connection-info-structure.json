@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/json-structure/weave-net-connection-info-structure.json",
+  "name": "ConnectionInfo",
+  "description": "Information about a peer connection",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "description": "Remote peer address",
+      "example": "10.0.1.5:6783"
+    },
+    "state": {
+      "type": "string",
+      "description": "Connection state",
+      "example": "established"
+    },
+    "info": {
+      "type": "string",
+      "description": "Additional connection info",
+      "example": "encrypted, sleeve"
+    }
+  }
+}

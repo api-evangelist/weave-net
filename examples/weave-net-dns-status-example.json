@@ -1,0 +1,6 @@
+{
+  "domain": "weave.local.",
+  "upstream": [
+    "example-value"
+  ]
+}

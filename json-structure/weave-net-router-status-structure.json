@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/json-structure/weave-net-router-status-structure.json",
+  "name": "RouterStatus",
+  "description": "Status of the Weave Net router",
+  "type": "object",
+  "properties": {
+    "encryption": {
+      "type": "boolean",
+      "description": "Whether encryption is enabled",
+      "example": false
+    },
+    "peers": {
+      "type": "array",
+      "description": "List of connected peers",
+      "items": {
+        "$ref": "#/components/schemas/PeerInfo"
+      }
+    },
+    "connections": {
+      "type": "array",
+      "description": "Active connections",
+      "items": {
+        "$ref": "#/components/schemas/ConnectionInfo"
+      }
+    }
+  }
+}

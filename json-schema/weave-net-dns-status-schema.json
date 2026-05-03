@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/json-schema/weave-net-dns-status-schema.json",
+  "title": "DNSStatus",
+  "description": "Status of the WeaveDNS subsystem",
+  "type": "object",
+  "properties": {
+    "domain": {
+      "type": "string",
+      "description": "DNS domain suffix",
+      "example": "weave.local."
+    },
+    "upstream": {
+      "type": "array",
+      "description": "Upstream DNS servers",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

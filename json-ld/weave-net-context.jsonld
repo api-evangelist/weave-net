@@ -1,0 +1,96 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "wn": "https://github.com/weaveworks/weave/schema/",
+    "schema": "https://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ConnectRequest": "wn:ConnectRequest",
+    "ConnectionInfo": "wn:ConnectionInfo",
+    "DNSStatus": "wn:DNSStatus",
+    "IPAMStatus": "wn:IPAMStatus",
+    "PeerInfo": "wn:PeerInfo",
+    "RouterStatus": "wn:RouterStatus",
+    "StatusResponse": "wn:StatusResponse",
+    "peer": {
+      "@id": "wn:peer",
+      "@type": "xsd:string"
+    },
+    "replace": {
+      "@id": "wn:replace",
+      "@type": "xsd:string"
+    },
+    "address": {
+      "@id": "wn:address",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "wn:state",
+      "@type": "xsd:string"
+    },
+    "info": {
+      "@id": "wn:info",
+      "@type": "xsd:string"
+    },
+    "domain": {
+      "@id": "wn:domain",
+      "@type": "xsd:string"
+    },
+    "upstream": {
+      "@id": "wn:upstream",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "wn:status",
+      "@type": "xsd:string"
+    },
+    "subnet": {
+      "@id": "wn:subnet",
+      "@type": "xsd:string"
+    },
+    "rangeNumIps": {
+      "@id": "wn:range_num_ips",
+      "@type": "xsd:integer"
+    },
+    "ownedNumIps": {
+      "@id": "wn:owned_num_ips",
+      "@type": "xsd:integer"
+    },
+    "name": "schema:name",
+    "nickName": {
+      "@id": "wn:nick_name",
+      "@type": "xsd:string"
+    },
+    "connections": {
+      "@id": "wn:connections",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "encryption": {
+      "@id": "wn:encryption",
+      "@type": "xsd:boolean"
+    },
+    "peers": {
+      "@id": "wn:peers",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "wn:version",
+      "@type": "xsd:string"
+    },
+    "router": {
+      "@id": "wn:router",
+      "@type": "xsd:string"
+    },
+    "ipam": {
+      "@id": "wn:ipam",
+      "@type": "xsd:string"
+    },
+    "dns": {
+      "@id": "wn:dns",
+      "@type": "xsd:string"
+    }
+  }
+}

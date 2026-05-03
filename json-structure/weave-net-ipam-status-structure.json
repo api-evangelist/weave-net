@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/json-structure/weave-net-ipam-status-structure.json",
+  "name": "IPAMStatus",
+  "description": "Status of the IPAM subsystem",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "description": "IPAM status",
+      "example": "ready"
+    },
+    "subnet": {
+      "type": "string",
+      "description": "Default subnet for allocation",
+      "example": "10.32.0.0/12"
+    },
+    "range_num_ips": {
+      "type": "int32",
+      "description": "Total number of IPs in range",
+      "example": 1048576
+    },
+    "owned_num_ips": {
+      "type": "int32",
+      "description": "Number of IPs owned by this peer",
+      "example": 524288
+    }
+  }
+}
