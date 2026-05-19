@@ -1,0 +1,67 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Weave Net HTTP API — Status
+  description: 'Weave Net HTTP API — Status. 1 operations. Lead operation: Weave Net Get Status. Self-contained Naftiko capability
+    covering one Weave Net business surface.'
+  tags:
+  - Weave Net
+  - Status
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WEAVE_NET_API_KEY: WEAVE_NET_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: weave-net-status
+    baseUri: http://127.0.0.1:6784
+    description: Weave Net HTTP API — Status business capability. Self-contained, no shared references.
+    resources:
+    - name: status
+      path: /status
+      operations:
+      - name: getstatus
+        method: GET
+        description: Weave Net Get Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: weave-net-status-rest
+    port: 8080
+    description: REST adapter for Weave Net HTTP API — Status. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/status
+      name: status
+      description: REST surface for status.
+      operations:
+      - method: GET
+        name: getstatus
+        description: Weave Net Get Status
+        call: weave-net-status.getstatus
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: weave-net-status-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Weave Net HTTP API — Status. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: weave-net-get-status
+      description: Weave Net Get Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: weave-net-status.getstatus
+      outputParameters:
+      - type: object
+        mapping: $.

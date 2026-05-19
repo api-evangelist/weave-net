@@ -1,0 +1,165 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Weave Net HTTP API — DNS
+  description: 'Weave Net HTTP API — DNS. 3 operations. Lead operation: Weave Net Get DNS Domain. Self-contained Naftiko capability
+    covering one Weave Net business surface.'
+  tags:
+  - Weave Net
+  - DNS
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WEAVE_NET_API_KEY: WEAVE_NET_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: weave-net-dns
+    baseUri: http://127.0.0.1:6784
+    description: Weave Net HTTP API — DNS business capability. Self-contained, no shared references.
+    resources:
+    - name: domain
+      path: /domain
+      operations:
+      - name: getdnsdomain
+        method: GET
+        description: Weave Net Get DNS Domain
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: name-containerId-ip
+      path: /name/{containerId}/{ip}
+      operations:
+      - name: registerdns
+        method: PUT
+        description: Weave Net Register DNS Name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: containerId
+          in: path
+          type: string
+          description: Container identifier
+          required: true
+        - name: ip
+          in: path
+          type: string
+          description: Container IP address
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deregisterdns
+        method: DELETE
+        description: Weave Net Deregister DNS Name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: containerId
+          in: path
+          type: string
+          description: Container identifier
+          required: true
+        - name: ip
+          in: path
+          type: string
+          description: Container IP address
+          required: true
+  exposes:
+  - type: rest
+    namespace: weave-net-dns-rest
+    port: 8080
+    description: REST adapter for Weave Net HTTP API — DNS. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/domain
+      name: domain
+      description: REST surface for domain.
+      operations:
+      - method: GET
+        name: getdnsdomain
+        description: Weave Net Get DNS Domain
+        call: weave-net-dns.getdnsdomain
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/name/{containerid}/{ip}
+      name: name-containerid-ip
+      description: REST surface for name-containerId-ip.
+      operations:
+      - method: PUT
+        name: registerdns
+        description: Weave Net Register DNS Name
+        call: weave-net-dns.registerdns
+        with:
+          containerId: rest.containerId
+          ip: rest.ip
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deregisterdns
+        description: Weave Net Deregister DNS Name
+        call: weave-net-dns.deregisterdns
+        with:
+          containerId: rest.containerId
+          ip: rest.ip
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: weave-net-dns-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Weave Net HTTP API — DNS. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: weave-net-get-dns-domain
+      description: Weave Net Get DNS Domain
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: weave-net-dns.getdnsdomain
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: weave-net-register-dns-name
+      description: Weave Net Register DNS Name
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: weave-net-dns.registerdns
+      with:
+        containerId: tools.containerId
+        ip: tools.ip
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: weave-net-deregister-dns-name
+      description: Weave Net Deregister DNS Name
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: weave-net-dns.deregisterdns
+      with:
+        containerId: tools.containerId
+        ip: tools.ip
+      outputParameters:
+      - type: object
+        mapping: $.

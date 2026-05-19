@@ -1,0 +1,288 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Weave Net HTTP API — IPAM
+  description: 'Weave Net HTTP API — IPAM. 6 operations. Lead operation: Weave Net Look Up IP Address. Self-contained Naftiko
+    capability covering one Weave Net business surface.'
+  tags:
+  - Weave Net
+  - IPAM
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WEAVE_NET_API_KEY: WEAVE_NET_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: weave-net-ipam
+    baseUri: http://127.0.0.1:6784
+    description: Weave Net HTTP API — IPAM business capability. Self-contained, no shared references.
+    resources:
+    - name: ip-containerId
+      path: /ip/{containerId}
+      operations:
+      - name: lookupip
+        method: GET
+        description: Weave Net Look Up IP Address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: containerId
+          in: path
+          type: string
+          description: Container identifier
+          required: true
+      - name: allocateip
+        method: POST
+        description: Weave Net Allocate IP Address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: containerId
+          in: path
+          type: string
+          description: Container identifier
+          required: true
+        - name: check-alive
+          in: query
+          type: boolean
+          description: Check if container is alive before allocating
+      - name: releaseips
+        method: DELETE
+        description: Weave Net Release IP Addresses
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: containerId
+          in: path
+          type: string
+          description: Container identifier
+          required: true
+    - name: ip-containerId-subnet
+      path: /ip/{containerId}/{subnet}
+      operations:
+      - name: allocateipinsubnet
+        method: POST
+        description: Weave Net Allocate IP Address in Subnet
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: containerId
+          in: path
+          type: string
+          description: Container identifier
+          required: true
+        - name: subnet
+          in: path
+          type: string
+          description: Target subnet in CIDR notation
+          required: true
+        - name: check-alive
+          in: query
+          type: boolean
+          description: Check if container is alive
+      - name: claimip
+        method: PUT
+        description: Weave Net Claim Specific IP Address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: containerId
+          in: path
+          type: string
+          description: Container identifier
+          required: true
+        - name: subnet
+          in: path
+          type: string
+          description: IP address and subnet in CIDR notation
+          required: true
+        - name: check-alive
+          in: query
+          type: boolean
+          description: Check if container is alive
+    - name: ipinfo-defaultsubnet
+      path: /ipinfo/defaultsubnet
+      operations:
+      - name: getdefaultsubnet
+        method: GET
+        description: Weave Net Get Default Subnet
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: weave-net-ipam-rest
+    port: 8080
+    description: REST adapter for Weave Net HTTP API — IPAM. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/ip/{containerid}
+      name: ip-containerid
+      description: REST surface for ip-containerId.
+      operations:
+      - method: GET
+        name: lookupip
+        description: Weave Net Look Up IP Address
+        call: weave-net-ipam.lookupip
+        with:
+          containerId: rest.containerId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: allocateip
+        description: Weave Net Allocate IP Address
+        call: weave-net-ipam.allocateip
+        with:
+          containerId: rest.containerId
+          check-alive: rest.check-alive
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: releaseips
+        description: Weave Net Release IP Addresses
+        call: weave-net-ipam.releaseips
+        with:
+          containerId: rest.containerId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/ip/{containerid}/{subnet}
+      name: ip-containerid-subnet
+      description: REST surface for ip-containerId-subnet.
+      operations:
+      - method: POST
+        name: allocateipinsubnet
+        description: Weave Net Allocate IP Address in Subnet
+        call: weave-net-ipam.allocateipinsubnet
+        with:
+          containerId: rest.containerId
+          subnet: rest.subnet
+          check-alive: rest.check-alive
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: claimip
+        description: Weave Net Claim Specific IP Address
+        call: weave-net-ipam.claimip
+        with:
+          containerId: rest.containerId
+          subnet: rest.subnet
+          check-alive: rest.check-alive
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/ipinfo/defaultsubnet
+      name: ipinfo-defaultsubnet
+      description: REST surface for ipinfo-defaultsubnet.
+      operations:
+      - method: GET
+        name: getdefaultsubnet
+        description: Weave Net Get Default Subnet
+        call: weave-net-ipam.getdefaultsubnet
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: weave-net-ipam-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Weave Net HTTP API — IPAM. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: weave-net-look-up-ip
+      description: Weave Net Look Up IP Address
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: weave-net-ipam.lookupip
+      with:
+        containerId: tools.containerId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: weave-net-allocate-ip-address
+      description: Weave Net Allocate IP Address
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: weave-net-ipam.allocateip
+      with:
+        containerId: tools.containerId
+        check-alive: tools.check-alive
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: weave-net-release-ip-addresses
+      description: Weave Net Release IP Addresses
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: weave-net-ipam.releaseips
+      with:
+        containerId: tools.containerId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: weave-net-allocate-ip-address-2
+      description: Weave Net Allocate IP Address in Subnet
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: weave-net-ipam.allocateipinsubnet
+      with:
+        containerId: tools.containerId
+        subnet: tools.subnet
+        check-alive: tools.check-alive
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: weave-net-claim-specific-ip
+      description: Weave Net Claim Specific IP Address
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: weave-net-ipam.claimip
+      with:
+        containerId: tools.containerId
+        subnet: tools.subnet
+        check-alive: tools.check-alive
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: weave-net-get-default-subnet
+      description: Weave Net Get Default Subnet
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: weave-net-ipam.getdefaultsubnet
+      outputParameters:
+      - type: object
+        mapping: $.
