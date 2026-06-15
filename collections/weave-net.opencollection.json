@@ -1,0 +1,320 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weave Net HTTP API",
+    "version": "2.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Get Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:6784/status"
+          },
+          "docs": "Returns the status of the Weave Net daemon. Returns HTTP 200 when fully ready, or HTTP 503 (Service Unavailable) when starting up. Clients checking for readiness should accept both status codes."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Peers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Connect to Peer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://127.0.0.1:6784/connect",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Connects to one or more remote Weave peers. Optionally replaces the current set of peers entirely when 'replace=true' is provided."
+        },
+        {
+          "info": {
+            "name": "Weave Net Remove Peer",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://127.0.0.1:6784/peer/:peerName",
+            "params": [
+              {
+                "name": "peerName",
+                "value": "10.0.1.5",
+                "type": "path",
+                "description": "Peer name or address"
+              }
+            ]
+          },
+          "docs": "Releases all IP space owned by the named peer and removes it from the peer list."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Network",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Expose Network",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://127.0.0.1:6784/expose/:cidr",
+            "params": [
+              {
+                "name": "cidr",
+                "value": "10.32.0.1/12",
+                "type": "path",
+                "description": "IP address and subnet in CIDR notation (e.g., 10.32.0.1/12)"
+              }
+            ]
+          },
+          "docs": "Assigns the given IP address/CIDR to the Weave bridge, exposing the Weave network to the host. This allows the host to communicate with containers on the Weave network."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "IPAM",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Look Up IP Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:6784/ip/:containerId",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              }
+            ]
+          },
+          "docs": "Returns the IP address allocated to the container with the given ID, or an empty response if none has been allocated."
+        },
+        {
+          "info": {
+            "name": "Weave Net Allocate IP Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://127.0.0.1:6784/ip/:containerId",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              },
+              {
+                "name": "check-alive",
+                "value": "false",
+                "type": "query",
+                "description": "Check if container is alive before allocating"
+              }
+            ]
+          },
+          "docs": "Allocates an IP address for the given container ID. If an IP is already allocated for this container, the existing IP is returned. Optionally checks if the container is alive before allocating."
+        },
+        {
+          "info": {
+            "name": "Weave Net Release IP Addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://127.0.0.1:6784/ip/:containerId",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              }
+            ]
+          },
+          "docs": "Releases all IP addresses allocated to the given container ID."
+        },
+        {
+          "info": {
+            "name": "Weave Net Allocate IP Address in Subnet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://127.0.0.1:6784/ip/:containerId/:subnet",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              },
+              {
+                "name": "subnet",
+                "value": "10.32.0.0/12",
+                "type": "path",
+                "description": "Target subnet in CIDR notation"
+              },
+              {
+                "name": "check-alive",
+                "value": "false",
+                "type": "query",
+                "description": "Check if container is alive"
+              }
+            ]
+          },
+          "docs": "Allocates an IP address for the given container ID within the specified subnet. Useful when multiple subnets are in use."
+        },
+        {
+          "info": {
+            "name": "Weave Net Claim Specific IP Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "http://127.0.0.1:6784/ip/:containerId/:subnet",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              },
+              {
+                "name": "subnet",
+                "value": "10.32.0.5/12",
+                "type": "path",
+                "description": "IP address and subnet in CIDR notation"
+              },
+              {
+                "name": "check-alive",
+                "value": "false",
+                "type": "query",
+                "description": "Check if container is alive"
+              }
+            ]
+          },
+          "docs": "Claims a specific IP address for the given container ID within the specified subnet."
+        },
+        {
+          "info": {
+            "name": "Weave Net Get Default Subnet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:6784/ipinfo/defaultsubnet"
+          },
+          "docs": "Returns the default IP subnet configured for Weave Net IP address allocation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "DNS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Get DNS Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:6784/domain"
+          },
+          "docs": "Returns the WeaveDNS domain suffix used for container name resolution. Defaults to weave.local."
+        },
+        {
+          "info": {
+            "name": "Weave Net Register DNS Name",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "http://127.0.0.1:6784/name/:containerId/:ip",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              },
+              {
+                "name": "ip",
+                "value": "10.32.0.2",
+                "type": "path",
+                "description": "Container IP address"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "fqdn",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Registers a DNS name (FQDN) for the given container ID and IP address in WeaveDNS, making the container resolvable by name on the Weave network."
+        },
+        {
+          "info": {
+            "name": "Weave Net Deregister DNS Name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://127.0.0.1:6784/name/:containerId/:ip",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              },
+              {
+                "name": "ip",
+                "value": "10.32.0.2",
+                "type": "path",
+                "description": "Container IP address"
+              }
+            ]
+          },
+          "docs": "Deregisters the DNS name for the given container ID and IP address from WeaveDNS."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
