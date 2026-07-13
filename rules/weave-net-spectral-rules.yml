@@ -1,6 +1,19 @@
+# weave-net — Spectral ruleset (strengthened)
+# Plain Spectral. Existing hand-authored rules preserved; measured rules added
+# from this provider's own OpenAPI conventions by strengthen_ruleset.py,
+# then self-validated against the spec.
+#
+# Provenance:
+#   - servers-expected-domain: 1/1 servers on 0.1
+#   - path-params-casing: camel @ 62% (n=13)
+#   - operationid-casing: camel @ 100% (n=13)
+#   - schema-names-casing: pascal @ 100% (n=7)
+#   - schema-properties-casing: snake @ 100% (n=21)
+#   - merge: kept 22 existing, added 5 measured, upgraded 0
+#   - added: servers-expected-domain, path-params-casing, schema-names-casing, schema-properties-casing, no-empty-descriptions
+extends:
+  - spectral:oas
 rules:
-
-  # INFO / METADATA
   info-title-required:
     description: Info must have a title
     severity: error
@@ -8,7 +21,6 @@ rules:
     then:
       field: title
       function: truthy
-
   info-description-required:
     description: Info must have a description
     severity: warn
@@ -16,7 +28,6 @@ rules:
     then:
       field: description
       function: truthy
-
   info-version-required:
     description: Info must have a version
     severity: error
@@ -24,7 +35,6 @@ rules:
     then:
       field: version
       function: truthy
-
   info-contact-recommended:
     description: Info should have contact information
     severity: info
@@ -32,7 +42,6 @@ rules:
     then:
       field: contact
       function: truthy
-
   info-license-required:
     description: Info should have license information
     severity: warn
@@ -40,8 +49,6 @@ rules:
     then:
       field: license
       function: truthy
-
-  # OPENAPI VERSION
   openapi-version-3:
     description: Must use OpenAPI 3.x
     severity: error
@@ -50,9 +57,7 @@ rules:
       field: openapi
       function: pattern
       functionOptions:
-        match: "^3\\."
-
-  # SERVERS
+        match: ^3\.
   servers-required:
     description: Servers must be defined
     severity: error
@@ -60,7 +65,6 @@ rules:
     then:
       field: servers
       function: truthy
-
   servers-description-required:
     description: Server entries should have descriptions
     severity: info
@@ -68,8 +72,6 @@ rules:
     then:
       field: description
       function: truthy
-
-  # OPERATIONS
   operation-operationId-required:
     description: Every operation must have an operationId
     severity: error
@@ -77,7 +79,6 @@ rules:
     then:
       field: operationId
       function: truthy
-
   operation-operationId-camel-case:
     description: OperationIds must use camelCase
     severity: warn
@@ -85,8 +86,7 @@ rules:
     then:
       function: pattern
       functionOptions:
-        match: "^[a-z][a-zA-Z0-9]*$"
-
+        match: ^[a-z][a-zA-Z0-9]*$
   operation-summary-required:
     description: Every operation must have a summary
     severity: warn
@@ -94,7 +94,6 @@ rules:
     then:
       field: summary
       function: truthy
-
   operation-summary-weave-net-prefix:
     description: Operation summaries must start with 'Weave Net'
     severity: info
@@ -102,8 +101,7 @@ rules:
     then:
       function: pattern
       functionOptions:
-        match: "^Weave Net"
-
+        match: ^Weave Net
   operation-description-required:
     description: Operations should have descriptions
     severity: warn
@@ -111,7 +109,6 @@ rules:
     then:
       field: description
       function: truthy
-
   operation-tags-required:
     description: Operations must have at least one tag
     severity: warn
@@ -119,8 +116,6 @@ rules:
     then:
       field: tags
       function: truthy
-
-  # PARAMETERS
   parameter-description-required:
     description: Parameters should have descriptions
     severity: warn
@@ -128,7 +123,6 @@ rules:
     then:
       field: description
       function: truthy
-
   parameter-schema-required:
     description: Parameters must have a schema
     severity: error
@@ -136,8 +130,6 @@ rules:
     then:
       field: schema
       function: truthy
-
-  # RESPONSES
   response-success-required:
     description: Every operation must have a success response
     severity: error
@@ -147,7 +139,6 @@ rules:
       functionOptions:
         schema:
           minProperties: 1
-
   response-description-required:
     description: Every response must have a description
     severity: warn
@@ -155,8 +146,6 @@ rules:
     then:
       field: description
       function: truthy
-
-  # HTTP METHOD CONVENTIONS
   get-no-request-body:
     description: GET operations must not have a request body
     severity: error
@@ -164,7 +153,6 @@ rules:
     then:
       field: requestBody
       function: falsy
-
   delete-returns-correct-status:
     description: DELETE operations should return 204 or 200
     severity: info
@@ -174,10 +162,10 @@ rules:
       functionOptions:
         schema:
           anyOf:
-            - required: ['204']
-            - required: ['200']
-
-  # SCHEMAS
+          - required:
+            - '204'
+          - required:
+            - '200'
   schema-properties-described:
     description: Schema properties should have descriptions
     severity: info
@@ -185,12 +173,50 @@ rules:
     then:
       field: description
       function: truthy
-
-  # MICROCKS EXTENSIONS
   operation-microcks-extension:
     description: Operations should have x-microcks-operation for mock support
     severity: info
     given: $.paths[*][get,post,put,delete,patch]
     then:
       field: x-microcks-operation
+      function: truthy
+  servers-expected-domain:
+    description: Server URLs should be on the 0.1 domain.
+    severity: warn
+    given: $.servers[*].url
+    then:
+      function: pattern
+      functionOptions:
+        match: 0\.1
+  path-params-casing:
+    description: Path parameters should be camelCase (the dominant convention in this API).
+    severity: warn
+    given: $.paths[*].parameters[?(@.in=='path')].name
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+  schema-names-casing:
+    description: Component schema names should be PascalCase (the dominant convention in this API).
+    severity: warn
+    given: $.components.schemas
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][A-Za-z0-9]*$
+  schema-properties-casing:
+    description: Schema properties should be snake_case (the dominant convention in this API).
+    severity: warn
+    given: $.components.schemas[*].properties
+    then:
+      field: '@key'
+      function: casing
+      functionOptions:
+        type: snake
+  no-empty-descriptions:
+    description: Descriptions must not be empty strings.
+    severity: warn
+    given: $..description
+    then:
       function: truthy
