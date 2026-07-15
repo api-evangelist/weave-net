@@ -42,6 +42,8 @@ apis:
       - url: https://github.com/weaveworks/weave/tree/master/api
         type: APIReference
 common:
+  - type: AgenticAccess
+    url: agentic-access/weave-net-agentic-access.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/weaveworks
   - url: https://github.com/weaveworks/weave
