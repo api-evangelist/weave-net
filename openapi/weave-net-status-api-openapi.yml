@@ -1,0 +1,151 @@
+openapi: 3.0.3
+info:
+  title: Weave Net HTTP DNS Status API
+  description: The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.
+  version: 2.0.0
+  contact:
+    url: https://github.com/weaveworks/weave
+  license:
+    name: Apache 2.0
+    url: https://github.com/weaveworks/weave/blob/master/LICENSE
+  x-generated-from: documentation
+  x-last-validated: '2026-05-03'
+servers:
+- url: http://127.0.0.1:6784
+  description: Local Weave Net daemon
+tags:
+- name: Status
+paths:
+  /status:
+    get:
+      operationId: getStatus
+      summary: Weave Net Get Status
+      description: Returns the status of the Weave Net daemon. Returns HTTP 200 when fully ready, or HTTP 503 (Service Unavailable) when starting up. Clients checking for readiness should accept both status codes.
+      tags:
+      - Status
+      responses:
+        '200':
+          description: Daemon is fully ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+              examples:
+                GetStatus200Example:
+                  summary: Default getStatus 200 response
+                  x-microcks-default: true
+                  value:
+                    version: 2.8.1
+                    router:
+                      encryption: false
+                      peers: []
+                    ipam:
+                      status: ready
+                      subnet: 10.32.0.0/12
+                    dns:
+                      domain: weave.local.
+        '503':
+          description: Daemon is starting up but not yet fully ready
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    PeerInfo:
+      type: object
+      description: Information about a Weave peer
+      properties:
+        name:
+          type: string
+          description: Peer name (hex string)
+          example: 8a:3d:c1:f9:a2:b7
+        nick_name:
+          type: string
+          description: Human-readable peer nickname
+          example: node-1
+        connections:
+          type: array
+          description: List of connections from this peer
+          items:
+            $ref: '#/components/schemas/ConnectionInfo'
+    IPAMStatus:
+      type: object
+      description: Status of the IPAM subsystem
+      properties:
+        status:
+          type: string
+          description: IPAM status
+          example: ready
+        subnet:
+          type: string
+          description: Default subnet for allocation
+          example: 10.32.0.0/12
+        range_num_ips:
+          type: integer
+          description: Total number of IPs in range
+          example: 1048576
+        owned_num_ips:
+          type: integer
+          description: Number of IPs owned by this peer
+          example: 524288
+    ConnectionInfo:
+      type: object
+      description: Information about a peer connection
+      properties:
+        address:
+          type: string
+          description: Remote peer address
+          example: 10.0.1.5:6783
+        state:
+          type: string
+          description: Connection state
+          example: established
+        info:
+          type: string
+          description: Additional connection info
+          example: encrypted, sleeve
+    RouterStatus:
+      type: object
+      description: Status of the Weave Net router
+      properties:
+        encryption:
+          type: boolean
+          description: Whether encryption is enabled
+          example: false
+        peers:
+          type: array
+          description: List of connected peers
+          items:
+            $ref: '#/components/schemas/PeerInfo'
+        connections:
+          type: array
+          description: Active connections
+          items:
+            $ref: '#/components/schemas/ConnectionInfo'
+    DNSStatus:
+      type: object
+      description: Status of the WeaveDNS subsystem
+      properties:
+        domain:
+          type: string
+          description: DNS domain suffix
+          example: weave.local.
+        upstream:
+          type: array
+          description: Upstream DNS servers
+          items:
+            type: string
+    StatusResponse:
+      type: object
+      description: Current status of the Weave Net daemon
+      properties:
+        version:
+          type: string
+          description: Weave Net version
+          example: 2.8.1
+        router:
+          $ref: '#/components/schemas/RouterStatus'
+        ipam:
+          $ref: '#/components/schemas/IPAMStatus'
+        dns:
+          $ref: '#/components/schemas/DNSStatus'

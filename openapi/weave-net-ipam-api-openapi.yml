@@ -1,0 +1,209 @@
+openapi: 3.0.3
+info:
+  title: Weave Net HTTP DNS IPAM API
+  description: The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.
+  version: 2.0.0
+  contact:
+    url: https://github.com/weaveworks/weave
+  license:
+    name: Apache 2.0
+    url: https://github.com/weaveworks/weave/blob/master/LICENSE
+  x-generated-from: documentation
+  x-last-validated: '2026-05-03'
+servers:
+- url: http://127.0.0.1:6784
+  description: Local Weave Net daemon
+tags:
+- name: IPAM
+paths:
+  /ip/{containerId}:
+    get:
+      operationId: lookupIP
+      summary: Weave Net Look Up IP Address
+      description: Returns the IP address allocated to the container with the given ID, or an empty response if none has been allocated.
+      tags:
+      - IPAM
+      parameters:
+      - name: containerId
+        in: path
+        required: true
+        description: Container identifier
+        schema:
+          type: string
+        example: abc123def456
+      responses:
+        '200':
+          description: IP address found
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                LookupIP200Example:
+                  summary: Default lookupIP 200 response
+                  x-microcks-default: true
+                  value: 10.32.0.1/12
+        '404':
+          description: No IP allocated for this container
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      operationId: allocateIP
+      summary: Weave Net Allocate IP Address
+      description: Allocates an IP address for the given container ID. If an IP is already allocated for this container, the existing IP is returned. Optionally checks if the container is alive before allocating.
+      tags:
+      - IPAM
+      parameters:
+      - name: containerId
+        in: path
+        required: true
+        description: Container identifier
+        schema:
+          type: string
+        example: abc123def456
+      - name: check-alive
+        in: query
+        required: false
+        description: Check if container is alive before allocating
+        schema:
+          type: boolean
+        example: false
+      responses:
+        '200':
+          description: IP address allocated
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                AllocateIP200Example:
+                  summary: Default allocateIP 200 response
+                  x-microcks-default: true
+                  value: 10.32.0.2/12
+        '503':
+          description: IPAM not ready
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: releaseIPs
+      summary: Weave Net Release IP Addresses
+      description: Releases all IP addresses allocated to the given container ID.
+      tags:
+      - IPAM
+      parameters:
+      - name: containerId
+        in: path
+        required: true
+        description: Container identifier
+        schema:
+          type: string
+        example: abc123def456
+      responses:
+        '204':
+          description: IPs released successfully
+        '404':
+          description: No IPs found for this container
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /ip/{containerId}/{subnet}:
+    post:
+      operationId: allocateIPInSubnet
+      summary: Weave Net Allocate IP Address in Subnet
+      description: Allocates an IP address for the given container ID within the specified subnet. Useful when multiple subnets are in use.
+      tags:
+      - IPAM
+      parameters:
+      - name: containerId
+        in: path
+        required: true
+        description: Container identifier
+        schema:
+          type: string
+        example: abc123def456
+      - name: subnet
+        in: path
+        required: true
+        description: Target subnet in CIDR notation
+        schema:
+          type: string
+        example: 10.32.0.0/12
+      - name: check-alive
+        in: query
+        required: false
+        description: Check if container is alive
+        schema:
+          type: boolean
+        example: false
+      responses:
+        '200':
+          description: IP allocated in subnet
+          content:
+            text/plain:
+              schema:
+                type: string
+        '503':
+          description: IPAM not ready or subnet unavailable
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: claimIP
+      summary: Weave Net Claim Specific IP Address
+      description: Claims a specific IP address for the given container ID within the specified subnet.
+      tags:
+      - IPAM
+      parameters:
+      - name: containerId
+        in: path
+        required: true
+        description: Container identifier
+        schema:
+          type: string
+        example: abc123def456
+      - name: subnet
+        in: path
+        required: true
+        description: IP address and subnet in CIDR notation
+        schema:
+          type: string
+        example: 10.32.0.5/12
+      - name: check-alive
+        in: query
+        required: false
+        description: Check if container is alive
+        schema:
+          type: boolean
+        example: false
+      responses:
+        '200':
+          description: IP claimed successfully
+        '400':
+          description: IP already claimed or invalid
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /ipinfo/defaultsubnet:
+    get:
+      operationId: getDefaultSubnet
+      summary: Weave Net Get Default Subnet
+      description: Returns the default IP subnet configured for Weave Net IP address allocation.
+      tags:
+      - IPAM
+      responses:
+        '200':
+          description: Default subnet returned
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                GetDefaultSubnet200Example:
+                  summary: Default getDefaultSubnet 200 response
+                  x-microcks-default: true
+                  value: 10.32.0.0/12
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK

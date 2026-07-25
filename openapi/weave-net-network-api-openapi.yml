@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  title: Weave Net HTTP DNS Network API
+  description: The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.
+  version: 2.0.0
+  contact:
+    url: https://github.com/weaveworks/weave
+  license:
+    name: Apache 2.0
+    url: https://github.com/weaveworks/weave/blob/master/LICENSE
+  x-generated-from: documentation
+  x-last-validated: '2026-05-03'
+servers:
+- url: http://127.0.0.1:6784
+  description: Local Weave Net daemon
+tags:
+- name: Network
+paths:
+  /expose/{cidr}:
+    post:
+      operationId: exposeNetwork
+      summary: Weave Net Expose Network
+      description: Assigns the given IP address/CIDR to the Weave bridge, exposing the Weave network to the host. This allows the host to communicate with containers on the Weave network.
+      tags:
+      - Network
+      parameters:
+      - name: cidr
+        in: path
+        required: true
+        description: IP address and subnet in CIDR notation (e.g., 10.32.0.1/12)
+        schema:
+          type: string
+        example: 10.32.0.1/12
+      responses:
+        '200':
+          description: Network exposed successfully
+        '400':
+          description: Invalid CIDR address
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK

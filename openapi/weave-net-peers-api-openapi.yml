@@ -1,0 +1,90 @@
+openapi: 3.0.3
+info:
+  title: Weave Net HTTP DNS Peers API
+  description: The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.
+  version: 2.0.0
+  contact:
+    url: https://github.com/weaveworks/weave
+  license:
+    name: Apache 2.0
+    url: https://github.com/weaveworks/weave/blob/master/LICENSE
+  x-generated-from: documentation
+  x-last-validated: '2026-05-03'
+servers:
+- url: http://127.0.0.1:6784
+  description: Local Weave Net daemon
+tags:
+- name: Peers
+paths:
+  /connect:
+    post:
+      operationId: connectPeer
+      summary: Weave Net Connect to Peer
+      description: Connects to one or more remote Weave peers. Optionally replaces the current set of peers entirely when 'replace=true' is provided.
+      tags:
+      - Peers
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConnectRequest'
+            examples:
+              ConnectPeerRequestExample:
+                summary: Default connectPeer request
+                x-microcks-default: true
+                value:
+                  peer: 10.0.1.5
+                  replace: 'false'
+      responses:
+        '200':
+          description: Successfully connected to peer
+        '400':
+          description: Invalid peer address
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /peer/{peerName}:
+    delete:
+      operationId: removePeer
+      summary: Weave Net Remove Peer
+      description: Releases all IP space owned by the named peer and removes it from the peer list.
+      tags:
+      - Peers
+      parameters:
+      - name: peerName
+        in: path
+        required: true
+        description: Peer name or address
+        schema:
+          type: string
+        example: 10.0.1.5
+      responses:
+        '200':
+          description: Peer removed successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: Peer not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    ConnectRequest:
+      type: object
+      description: Request to connect to a peer
+      properties:
+        peer:
+          type: string
+          description: Peer address or hostname
+          example: 10.0.1.5
+        replace:
+          type: string
+          description: Whether to replace all existing peers
+          enum:
+          - 'true'
+          - 'false'
+          example: 'false'

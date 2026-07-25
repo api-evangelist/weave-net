@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: Weave Net HTTP DNS API
+  description: The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.
+  version: 2.0.0
+  contact:
+    url: https://github.com/weaveworks/weave
+  license:
+    name: Apache 2.0
+    url: https://github.com/weaveworks/weave/blob/master/LICENSE
+  x-generated-from: documentation
+  x-last-validated: '2026-05-03'
+servers:
+- url: http://127.0.0.1:6784
+  description: Local Weave Net daemon
+tags:
+- name: DNS
+paths:
+  /domain:
+    get:
+      operationId: getDNSDomain
+      summary: Weave Net Get DNS Domain
+      description: Returns the WeaveDNS domain suffix used for container name resolution. Defaults to weave.local.
+      tags:
+      - DNS
+      responses:
+        '200':
+          description: DNS domain returned
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                GetDNSDomain200Example:
+                  summary: Default getDNSDomain 200 response
+                  x-microcks-default: true
+                  value: weave.local.
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /name/{containerId}/{ip}:
+    put:
+      operationId: registerDNS
+      summary: Weave Net Register DNS Name
+      description: Registers a DNS name (FQDN) for the given container ID and IP address in WeaveDNS, making the container resolvable by name on the Weave network.
+      tags:
+      - DNS
+      parameters:
+      - name: containerId
+        in: path
+        required: true
+        description: Container identifier
+        schema:
+          type: string
+        example: abc123def456
+      - name: ip
+        in: path
+        required: true
+        description: Container IP address
+        schema:
+          type: string
+        example: 10.32.0.2
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - fqdn
+              properties:
+                fqdn:
+                  type: string
+                  description: Fully qualified domain name to register
+            examples:
+              RegisterDNSRequestExample:
+                summary: Default registerDNS request
+                x-microcks-default: true
+                value:
+                  fqdn: myapp.weave.local.
+      responses:
+        '200':
+          description: DNS name registered
+        '400':
+          description: Invalid FQDN or IP
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: deregisterDNS
+      summary: Weave Net Deregister DNS Name
+      description: Deregisters the DNS name for the given container ID and IP address from WeaveDNS.
+      tags:
+      - DNS
+      parameters:
+      - name: containerId
+        in: path
+        required: true
+        description: Container identifier
+        schema:
+          type: string
+        example: abc123def456
+      - name: ip
+        in: path
+        required: true
+        description: Container IP address
+        schema:
+          type: string
+        example: 10.32.0.2
+      responses:
+        '200':
+          description: DNS name deregistered
+        '404':
+          description: DNS name not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
