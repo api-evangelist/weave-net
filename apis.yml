@@ -7,9 +7,21 @@ description: >-
   daemon exposes a local HTTP API on port 6784 for programmatic network management. Weave Net is maintained by
   Weaveworks and is archived but remains widely used in production environments.
 type: Index
+accessModel:
+  pricing: freemium
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
 position: Consumer
 access: 3rd-Party
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/weave-net.png
 tags:
   - Containers
   - Networking
@@ -23,24 +35,71 @@ created: '2026-03-26'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 apis:
-  - aid: weave-net:weave-net-http-api
-    name: Weave Net HTTP API
-    description: >-
-      The Weave Net local HTTP API exposed on port 6784 for managing container networking including IP address
-      allocation (IPAM), peer connections, WeaveDNS registration, and network bridge exposure.
-    humanURL: https://github.com/weaveworks/weave
-    tags:
-      - Containers
-      - Networking
-      - IPAM
-      - DNS
-    properties:
-      - url: openapi/weave-net-openapi.yml
-        type: OpenAPI
-      - url: https://github.com/weaveworks/weave
-        type: Documentation
-      - url: https://github.com/weaveworks/weave/tree/master/api
-        type: APIReference
+- aid: weave-net:weave-net-dns-api
+  name: Weave Net DNS API
+  description: The DNS API from Weave Net — 2 operation(s) for dns.
+  humanURL: https://github.com/weaveworks/weave
+  tags:
+  - DNS
+  properties:
+  - type: OpenAPI
+    url: openapi/weave-net-dns-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/weaveworks/weave
+  - type: APIReference
+    url: https://github.com/weaveworks/weave/tree/master/api
+- aid: weave-net:weave-net-ipam-api
+  name: Weave Net IPAM API
+  description: The IPAM API from Weave Net — 3 operation(s) for ipam.
+  humanURL: https://github.com/weaveworks/weave
+  tags:
+  - IPAM
+  properties:
+  - type: OpenAPI
+    url: openapi/weave-net-ipam-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/weaveworks/weave
+  - type: APIReference
+    url: https://github.com/weaveworks/weave/tree/master/api
+- aid: weave-net:weave-net-network-api
+  name: Weave Net Network API
+  description: The Network API from Weave Net — 1 operation(s) for network.
+  humanURL: https://github.com/weaveworks/weave
+  tags:
+  - Network
+  properties:
+  - type: OpenAPI
+    url: openapi/weave-net-network-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/weaveworks/weave
+  - type: APIReference
+    url: https://github.com/weaveworks/weave/tree/master/api
+- aid: weave-net:weave-net-peers-api
+  name: Weave Net Peers API
+  description: The Peers API from Weave Net — 2 operation(s) for peers.
+  humanURL: https://github.com/weaveworks/weave
+  tags:
+  - Peers
+  properties:
+  - type: OpenAPI
+    url: openapi/weave-net-peers-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/weaveworks/weave
+  - type: APIReference
+    url: https://github.com/weaveworks/weave/tree/master/api
+- aid: weave-net:weave-net-status-api
+  name: Weave Net Status API
+  description: The Status API from Weave Net — 1 operation(s) for status.
+  humanURL: https://github.com/weaveworks/weave
+  tags:
+  - Status
+  properties:
+  - type: OpenAPI
+    url: openapi/weave-net-status-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/weaveworks/weave
+  - type: APIReference
+    url: https://github.com/weaveworks/weave/tree/master/api
 common:
   - type: AgenticAccess
     url: agentic-access/weave-net-agentic-access.yml
