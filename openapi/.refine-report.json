@@ -1,0 +1,22 @@
+{
+  "provider": "weave-net",
+  "sources": [
+    "weave-net-dns-api-openapi.yml",
+    "weave-net-ipam-api-openapi.yml",
+    "weave-net-network-api-openapi.yml",
+    "weave-net-peers-api-openapi.yml",
+    "weave-net-status-api-openapi.yml"
+  ],
+  "outputs": [
+    "weave-net-dns-api-openapi.yml",
+    "weave-net-ipam-api-openapi.yml",
+    "weave-net-network-api-openapi.yml",
+    "weave-net-peers-api-openapi.yml",
+    "weave-net-status-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

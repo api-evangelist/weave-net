@@ -1,0 +1,583 @@
+openapi: 3.0.3
+info:
+  title: Weave Net HTTP API
+  description: >-
+    The Weave Net HTTP API provides programmatic control over the Weave Net
+    container networking daemon. It is exposed locally on port 6784 and allows
+    management of IPAM (IP address allocation), peer connections, DNS
+    registration, network exposure, and status monitoring. This API is used
+    internally by the weave CLI and can be used by tooling that manages
+    container network configuration.
+  version: 2.0.0
+  contact:
+    url: https://github.com/weaveworks/weave
+  license:
+    name: Apache 2.0
+    url: https://github.com/weaveworks/weave/blob/master/LICENSE
+  x-generated-from: documentation
+  x-last-validated: '2026-05-03'
+servers:
+  - url: http://127.0.0.1:6784
+    description: Local Weave Net daemon
+paths:
+  /status:
+    get:
+      operationId: getStatus
+      summary: Weave Net Get Status
+      description: >-
+        Returns the status of the Weave Net daemon. Returns HTTP 200 when
+        fully ready, or HTTP 503 (Service Unavailable) when starting up.
+        Clients checking for readiness should accept both status codes.
+      tags:
+        - Status
+      responses:
+        '200':
+          description: Daemon is fully ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+              examples:
+                GetStatus200Example:
+                  summary: Default getStatus 200 response
+                  x-microcks-default: true
+                  value:
+                    version: "2.8.1"
+                    router:
+                      encryption: false
+                      peers: []
+                    ipam:
+                      status: "ready"
+                      subnet: "10.32.0.0/12"
+                    dns:
+                      domain: "weave.local."
+        '503':
+          description: Daemon is starting up but not yet fully ready
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /connect:
+    post:
+      operationId: connectPeer
+      summary: Weave Net Connect to Peer
+      description: >-
+        Connects to one or more remote Weave peers. Optionally replaces the
+        current set of peers entirely when 'replace=true' is provided.
+      tags:
+        - Peers
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConnectRequest'
+            examples:
+              ConnectPeerRequestExample:
+                summary: Default connectPeer request
+                x-microcks-default: true
+                value:
+                  peer: "10.0.1.5"
+                  replace: "false"
+      responses:
+        '200':
+          description: Successfully connected to peer
+        '400':
+          description: Invalid peer address
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /expose/{cidr}:
+    post:
+      operationId: exposeNetwork
+      summary: Weave Net Expose Network
+      description: >-
+        Assigns the given IP address/CIDR to the Weave bridge, exposing the
+        Weave network to the host. This allows the host to communicate with
+        containers on the Weave network.
+      tags:
+        - Network
+      parameters:
+        - name: cidr
+          in: path
+          required: true
+          description: "IP address and subnet in CIDR notation (e.g., 10.32.0.1/12)"
+          schema:
+            type: string
+          example: "10.32.0.1/12"
+      responses:
+        '200':
+          description: Network exposed successfully
+        '400':
+          description: Invalid CIDR address
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /ip/{containerId}:
+    get:
+      operationId: lookupIP
+      summary: Weave Net Look Up IP Address
+      description: >-
+        Returns the IP address allocated to the container with the given ID,
+        or an empty response if none has been allocated.
+      tags:
+        - IPAM
+      parameters:
+        - name: containerId
+          in: path
+          required: true
+          description: "Container identifier"
+          schema:
+            type: string
+          example: "abc123def456"
+      responses:
+        '200':
+          description: IP address found
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                LookupIP200Example:
+                  summary: Default lookupIP 200 response
+                  x-microcks-default: true
+                  value: "10.32.0.1/12"
+        '404':
+          description: No IP allocated for this container
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+    post:
+      operationId: allocateIP
+      summary: Weave Net Allocate IP Address
+      description: >-
+        Allocates an IP address for the given container ID. If an IP is
+        already allocated for this container, the existing IP is returned.
+        Optionally checks if the container is alive before allocating.
+      tags:
+        - IPAM
+      parameters:
+        - name: containerId
+          in: path
+          required: true
+          description: "Container identifier"
+          schema:
+            type: string
+          example: "abc123def456"
+        - name: check-alive
+          in: query
+          required: false
+          description: "Check if container is alive before allocating"
+          schema:
+            type: boolean
+          example: false
+      responses:
+        '200':
+          description: IP address allocated
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                AllocateIP200Example:
+                  summary: Default allocateIP 200 response
+                  x-microcks-default: true
+                  value: "10.32.0.2/12"
+        '503':
+          description: IPAM not ready
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+    delete:
+      operationId: releaseIPs
+      summary: Weave Net Release IP Addresses
+      description: >-
+        Releases all IP addresses allocated to the given container ID.
+      tags:
+        - IPAM
+      parameters:
+        - name: containerId
+          in: path
+          required: true
+          description: "Container identifier"
+          schema:
+            type: string
+          example: "abc123def456"
+      responses:
+        '204':
+          description: IPs released successfully
+        '404':
+          description: No IPs found for this container
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /ip/{containerId}/{subnet}:
+    post:
+      operationId: allocateIPInSubnet
+      summary: Weave Net Allocate IP Address in Subnet
+      description: >-
+        Allocates an IP address for the given container ID within the specified
+        subnet. Useful when multiple subnets are in use.
+      tags:
+        - IPAM
+      parameters:
+        - name: containerId
+          in: path
+          required: true
+          description: "Container identifier"
+          schema:
+            type: string
+          example: "abc123def456"
+        - name: subnet
+          in: path
+          required: true
+          description: "Target subnet in CIDR notation"
+          schema:
+            type: string
+          example: "10.32.0.0/12"
+        - name: check-alive
+          in: query
+          required: false
+          description: "Check if container is alive"
+          schema:
+            type: boolean
+          example: false
+      responses:
+        '200':
+          description: IP allocated in subnet
+          content:
+            text/plain:
+              schema:
+                type: string
+        '503':
+          description: IPAM not ready or subnet unavailable
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+    put:
+      operationId: claimIP
+      summary: Weave Net Claim Specific IP Address
+      description: >-
+        Claims a specific IP address for the given container ID within the
+        specified subnet.
+      tags:
+        - IPAM
+      parameters:
+        - name: containerId
+          in: path
+          required: true
+          description: "Container identifier"
+          schema:
+            type: string
+          example: "abc123def456"
+        - name: subnet
+          in: path
+          required: true
+          description: "IP address and subnet in CIDR notation"
+          schema:
+            type: string
+          example: "10.32.0.5/12"
+        - name: check-alive
+          in: query
+          required: false
+          description: "Check if container is alive"
+          schema:
+            type: boolean
+          example: false
+      responses:
+        '200':
+          description: IP claimed successfully
+        '400':
+          description: IP already claimed or invalid
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /peer/{peerName}:
+    delete:
+      operationId: removePeer
+      summary: Weave Net Remove Peer
+      description: >-
+        Releases all IP space owned by the named peer and removes it from
+        the peer list.
+      tags:
+        - Peers
+      parameters:
+        - name: peerName
+          in: path
+          required: true
+          description: "Peer name or address"
+          schema:
+            type: string
+          example: "10.0.1.5"
+      responses:
+        '200':
+          description: Peer removed successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: Peer not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /ipinfo/defaultsubnet:
+    get:
+      operationId: getDefaultSubnet
+      summary: Weave Net Get Default Subnet
+      description: >-
+        Returns the default IP subnet configured for Weave Net IP address
+        allocation.
+      tags:
+        - IPAM
+      responses:
+        '200':
+          description: Default subnet returned
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                GetDefaultSubnet200Example:
+                  summary: Default getDefaultSubnet 200 response
+                  x-microcks-default: true
+                  value: "10.32.0.0/12"
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /domain:
+    get:
+      operationId: getDNSDomain
+      summary: Weave Net Get DNS Domain
+      description: >-
+        Returns the WeaveDNS domain suffix used for container name resolution.
+        Defaults to weave.local.
+      tags:
+        - DNS
+      responses:
+        '200':
+          description: DNS domain returned
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                GetDNSDomain200Example:
+                  summary: Default getDNSDomain 200 response
+                  x-microcks-default: true
+                  value: "weave.local."
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /name/{containerId}/{ip}:
+    put:
+      operationId: registerDNS
+      summary: Weave Net Register DNS Name
+      description: >-
+        Registers a DNS name (FQDN) for the given container ID and IP address
+        in WeaveDNS, making the container resolvable by name on the Weave
+        network.
+      tags:
+        - DNS
+      parameters:
+        - name: containerId
+          in: path
+          required: true
+          description: "Container identifier"
+          schema:
+            type: string
+          example: "abc123def456"
+        - name: ip
+          in: path
+          required: true
+          description: "Container IP address"
+          schema:
+            type: string
+          example: "10.32.0.2"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [fqdn]
+              properties:
+                fqdn:
+                  type: string
+                  description: "Fully qualified domain name to register"
+            examples:
+              RegisterDNSRequestExample:
+                summary: Default registerDNS request
+                x-microcks-default: true
+                value:
+                  fqdn: "myapp.weave.local."
+      responses:
+        '200':
+          description: DNS name registered
+        '400':
+          description: Invalid FQDN or IP
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+    delete:
+      operationId: deregisterDNS
+      summary: Weave Net Deregister DNS Name
+      description: >-
+        Deregisters the DNS name for the given container ID and IP address
+        from WeaveDNS.
+      tags:
+        - DNS
+      parameters:
+        - name: containerId
+          in: path
+          required: true
+          description: "Container identifier"
+          schema:
+            type: string
+          example: "abc123def456"
+        - name: ip
+          in: path
+          required: true
+          description: "Container IP address"
+          schema:
+            type: string
+          example: "10.32.0.2"
+      responses:
+        '200':
+          description: DNS name deregistered
+        '404':
+          description: DNS name not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+components:
+  schemas:
+    StatusResponse:
+      type: object
+      description: "Current status of the Weave Net daemon"
+      properties:
+        version:
+          type: string
+          description: "Weave Net version"
+          example: "2.8.1"
+        router:
+          $ref: '#/components/schemas/RouterStatus'
+        ipam:
+          $ref: '#/components/schemas/IPAMStatus'
+        dns:
+          $ref: '#/components/schemas/DNSStatus'
+
+    RouterStatus:
+      type: object
+      description: "Status of the Weave Net router"
+      properties:
+        encryption:
+          type: boolean
+          description: "Whether encryption is enabled"
+          example: false
+        peers:
+          type: array
+          description: "List of connected peers"
+          items:
+            $ref: '#/components/schemas/PeerInfo'
+        connections:
+          type: array
+          description: "Active connections"
+          items:
+            $ref: '#/components/schemas/ConnectionInfo'
+
+    PeerInfo:
+      type: object
+      description: "Information about a Weave peer"
+      properties:
+        name:
+          type: string
+          description: "Peer name (hex string)"
+          example: "8a:3d:c1:f9:a2:b7"
+        nick_name:
+          type: string
+          description: "Human-readable peer nickname"
+          example: "node-1"
+        connections:
+          type: array
+          description: "List of connections from this peer"
+          items:
+            $ref: '#/components/schemas/ConnectionInfo'
+
+    ConnectionInfo:
+      type: object
+      description: "Information about a peer connection"
+      properties:
+        address:
+          type: string
+          description: "Remote peer address"
+          example: "10.0.1.5:6783"
+        state:
+          type: string
+          description: "Connection state"
+          example: "established"
+        info:
+          type: string
+          description: "Additional connection info"
+          example: "encrypted, sleeve"
+
+    IPAMStatus:
+      type: object
+      description: "Status of the IPAM subsystem"
+      properties:
+        status:
+          type: string
+          description: "IPAM status"
+          example: "ready"
+        subnet:
+          type: string
+          description: "Default subnet for allocation"
+          example: "10.32.0.0/12"
+        range_num_ips:
+          type: integer
+          description: "Total number of IPs in range"
+          example: 1048576
+        owned_num_ips:
+          type: integer
+          description: "Number of IPs owned by this peer"
+          example: 524288
+
+    DNSStatus:
+      type: object
+      description: "Status of the WeaveDNS subsystem"
+      properties:
+        domain:
+          type: string
+          description: "DNS domain suffix"
+          example: "weave.local."
+        upstream:
+          type: array
+          description: "Upstream DNS servers"
+          items:
+            type: string
+
+    ConnectRequest:
+      type: object
+      description: "Request to connect to a peer"
+      properties:
+        peer:
+          type: string
+          description: "Peer address or hostname"
+          example: "10.0.1.5"
+        replace:
+          type: string
+          description: "Whether to replace all existing peers"
+          enum: ["true", "false"]
+          example: "false"
