@@ -1,0 +1,421 @@
+{
+  "item": [
+    {
+      "id": "0aa66a42-382d-4907-89ea-cdc8f294aa2f",
+      "name": "DNS",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2f7ae227-587a-493a-8687-a91e6a64f63a",
+          "name": "Weave Net Get DNS Domain",
+          "request": {
+            "name": "Weave Net Get DNS Domain",
+            "description": {
+              "content": "Returns the WeaveDNS domain suffix used for container name resolution. Defaults to weave.local.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "domain"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8cf5b6b1-5e1a-407b-aa86-9819a82c3ef4",
+              "name": "DNS domain returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "domain"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "weave.local.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6f07c02c-89e6-49c5-a12c-1cbd1230d3f5",
+          "name": "Weave Net Register DNS Name",
+          "request": {
+            "name": "Weave Net Register DNS Name",
+            "description": {
+              "content": "Registers a DNS name (FQDN) for the given container ID and IP address in WeaveDNS, making the container resolvable by name on the Weave network.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "name",
+                ":containerId",
+                ":ip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "containerId",
+                  "description": "(Required) Container identifier"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ip",
+                  "description": "(Required) Container IP address"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "fqdn",
+                  "value": "<string>",
+                  "description": "(Required) Fully qualified domain name to register"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "61ae8699-85ce-4701-b370-7fbaab494a81",
+              "name": "DNS name registered",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "name",
+                    ":containerId",
+                    ":ip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ip",
+                      "description": "(Required) Container IP address"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Fully qualified domain name to register",
+                        "type": "text/plain"
+                      },
+                      "key": "fqdn",
+                      "value": "myapp.weave.local."
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b8a70b7f-817e-44ba-b7e6-b86dc3abb8ed",
+              "name": "Invalid FQDN or IP",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "name",
+                    ":containerId",
+                    ":ip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ip",
+                      "description": "(Required) Container IP address"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Fully qualified domain name to register",
+                        "type": "text/plain"
+                      },
+                      "key": "fqdn",
+                      "value": "myapp.weave.local."
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "06b2f1a5-4c55-41fb-908c-35b01f4d7fa9",
+          "name": "Weave Net Deregister DNS Name",
+          "request": {
+            "name": "Weave Net Deregister DNS Name",
+            "description": {
+              "content": "Deregisters the DNS name for the given container ID and IP address from WeaveDNS.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "name",
+                ":containerId",
+                ":ip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "containerId",
+                  "description": "(Required) Container identifier"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ip",
+                  "description": "(Required) Container IP address"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4edca57b-4783-4fcf-bb92-8b306dabff60",
+              "name": "DNS name deregistered",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "name",
+                    ":containerId",
+                    ":ip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ip",
+                      "description": "(Required) Container IP address"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "547a0946-a324-42ca-b23d-d8652e2004c2",
+              "name": "DNS name not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "name",
+                    ":containerId",
+                    ":ip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ip",
+                      "description": "(Required) Container IP address"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://127.0.0.1:6784",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "cc21c80e-7218-492b-9828-67465af00557",
+    "name": "Weave Net HTTP DNS API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.",
+      "type": "text/plain"
+    }
+  }
+}

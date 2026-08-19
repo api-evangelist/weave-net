@@ -1,0 +1,146 @@
+{
+  "item": [
+    {
+      "id": "d504f99c-e8ce-4d8c-9d4b-311df395d19d",
+      "name": "Network",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8ef16e63-fd0c-47c9-9265-90056688f994",
+          "name": "Weave Net Expose Network",
+          "request": {
+            "name": "Weave Net Expose Network",
+            "description": {
+              "content": "Assigns the given IP address/CIDR to the Weave bridge, exposing the Weave network to the host. This allows the host to communicate with containers on the Weave network.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "expose",
+                ":cidr"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cidr",
+                  "description": "(Required) IP address and subnet in CIDR notation (e.g., 10.32.0.1/12)"
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8d96d87d-df54-44a4-8313-5d7629b8cdda",
+              "name": "Network exposed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "expose",
+                    ":cidr"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cidr",
+                      "description": "(Required) IP address and subnet in CIDR notation (e.g., 10.32.0.1/12)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cb653091-4e88-4e67-8100-0d6437dc95db",
+              "name": "Invalid CIDR address",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "expose",
+                    ":cidr"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cidr",
+                      "description": "(Required) IP address and subnet in CIDR notation (e.g., 10.32.0.1/12)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://127.0.0.1:6784",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e3fd0424-0e2c-471f-ba6c-09d3b4c825f0",
+    "name": "Weave Net HTTP DNS Network API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.",
+      "type": "text/plain"
+    }
+  }
+}

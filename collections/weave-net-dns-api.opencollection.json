@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weave Net HTTP DNS API",
+    "version": "2.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "DNS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Get DNS Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:6784/domain"
+          },
+          "docs": "Returns the WeaveDNS domain suffix used for container name resolution. Defaults to weave.local."
+        },
+        {
+          "info": {
+            "name": "Weave Net Register DNS Name",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "http://127.0.0.1:6784/name/:containerId/:ip",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              },
+              {
+                "name": "ip",
+                "value": "10.32.0.2",
+                "type": "path",
+                "description": "Container IP address"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "fqdn",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Registers a DNS name (FQDN) for the given container ID and IP address in WeaveDNS, making the container resolvable by name on the Weave network."
+        },
+        {
+          "info": {
+            "name": "Weave Net Deregister DNS Name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://127.0.0.1:6784/name/:containerId/:ip",
+            "params": [
+              {
+                "name": "containerId",
+                "value": "abc123def456",
+                "type": "path",
+                "description": "Container identifier"
+              },
+              {
+                "name": "ip",
+                "value": "10.32.0.2",
+                "type": "path",
+                "description": "Container IP address"
+              }
+            ]
+          },
+          "docs": "Deregisters the DNS name for the given container ID and IP address from WeaveDNS."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

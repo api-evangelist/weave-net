@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weave Net HTTP DNS Status API",
+    "version": "2.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Get Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:6784/status"
+          },
+          "docs": "Returns the status of the Weave Net daemon. Returns HTTP 200 when fully ready, or HTTP 503 (Service Unavailable) when starting up. Clients checking for readiness should accept both status codes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

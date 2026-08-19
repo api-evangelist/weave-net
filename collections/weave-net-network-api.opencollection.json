@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weave Net HTTP DNS Network API",
+    "version": "2.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Network",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Expose Network",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://127.0.0.1:6784/expose/:cidr",
+            "params": [
+              {
+                "name": "cidr",
+                "value": "10.32.0.1/12",
+                "type": "path",
+                "description": "IP address and subnet in CIDR notation (e.g., 10.32.0.1/12)"
+              }
+            ]
+          },
+          "docs": "Assigns the given IP address/CIDR to the Weave bridge, exposing the Weave network to the host. This allows the host to communicate with containers on the Weave network."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

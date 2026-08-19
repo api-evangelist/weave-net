@@ -1,0 +1,809 @@
+{
+  "item": [
+    {
+      "id": "ecf0912d-d4e6-432c-9c80-0ded2d52121a",
+      "name": "IPAM",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "256a8f90-e033-41c5-a612-e5fd9855c3fe",
+          "name": "Weave Net Look Up IP Address",
+          "request": {
+            "name": "Weave Net Look Up IP Address",
+            "description": {
+              "content": "Returns the IP address allocated to the container with the given ID, or an empty response if none has been allocated.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ip",
+                ":containerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "containerId",
+                  "description": "(Required) Container identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8e9f067d-1aec-4044-a272-47b728be4698",
+              "name": "IP address found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "10.32.0.1/12",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "34c2a500-7c31-49d5-a6b4-6cb4fc27d320",
+              "name": "No IP allocated for this container",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "308cd8d8-59b3-4de0-9864-f23190032b7d",
+          "name": "Weave Net Allocate IP Address",
+          "request": {
+            "name": "Weave Net Allocate IP Address",
+            "description": {
+              "content": "Allocates an IP address for the given container ID. If an IP is already allocated for this container, the existing IP is returned. Optionally checks if the container is alive before allocating.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ip",
+                ":containerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "check-alive",
+                  "value": "<boolean>",
+                  "description": "Check if container is alive before allocating"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "containerId",
+                  "description": "(Required) Container identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cb210c2d-48bb-45f0-877f-9b11a4b13b0a",
+              "name": "IP address allocated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "check-alive",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "10.32.0.2/12",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7550d731-3085-42b5-9dc2-7856c20ade64",
+              "name": "IPAM not ready",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "check-alive",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e07338f9-2a56-44f1-a169-49e821bcb345",
+          "name": "Weave Net Release IP Addresses",
+          "request": {
+            "name": "Weave Net Release IP Addresses",
+            "description": {
+              "content": "Releases all IP addresses allocated to the given container ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ip",
+                ":containerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "containerId",
+                  "description": "(Required) Container identifier"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "94450c22-b2ef-4647-9af6-9802bebc2dd0",
+              "name": "IPs released successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "777c419d-a6c9-4fc2-bb55-eb20237bd719",
+              "name": "No IPs found for this container",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "332e2394-0782-4c3e-a41f-71fea2138e89",
+          "name": "Weave Net Allocate IP Address in Subnet",
+          "request": {
+            "name": "Weave Net Allocate IP Address in Subnet",
+            "description": {
+              "content": "Allocates an IP address for the given container ID within the specified subnet. Useful when multiple subnets are in use.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ip",
+                ":containerId",
+                ":subnet"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "check-alive",
+                  "value": "<boolean>",
+                  "description": "Check if container is alive"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "containerId",
+                  "description": "(Required) Container identifier"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subnet",
+                  "description": "(Required) Target subnet in CIDR notation"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ae455689-0163-4016-8263-d148d3c19c77",
+              "name": "IP allocated in subnet",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId",
+                    ":subnet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "check-alive",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subnet",
+                      "description": "(Required) Target subnet in CIDR notation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8c58d694-9148-492c-a88e-831319a25388",
+              "name": "IPAM not ready or subnet unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId",
+                    ":subnet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "check-alive",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subnet",
+                      "description": "(Required) Target subnet in CIDR notation"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "45127893-cb6f-4692-96b5-489dd79f8691",
+          "name": "Weave Net Claim Specific IP Address",
+          "request": {
+            "name": "Weave Net Claim Specific IP Address",
+            "description": {
+              "content": "Claims a specific IP address for the given container ID within the specified subnet.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ip",
+                ":containerId",
+                ":subnet"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "check-alive",
+                  "value": "<boolean>",
+                  "description": "Check if container is alive"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "containerId",
+                  "description": "(Required) Container identifier"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subnet",
+                  "description": "(Required) IP address and subnet in CIDR notation"
+                }
+              ]
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0a48e950-dd7c-4640-9731-65ff1467f251",
+              "name": "IP claimed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId",
+                    ":subnet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "check-alive",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subnet",
+                      "description": "(Required) IP address and subnet in CIDR notation"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ad278d22-9cbd-468d-9fba-615b8a8b30fb",
+              "name": "IP already claimed or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ip",
+                    ":containerId",
+                    ":subnet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "check-alive",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "containerId",
+                      "description": "(Required) Container identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subnet",
+                      "description": "(Required) IP address and subnet in CIDR notation"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "18142fa0-319a-4d94-88f8-add10d7a7ff0",
+          "name": "Weave Net Get Default Subnet",
+          "request": {
+            "name": "Weave Net Get Default Subnet",
+            "description": {
+              "content": "Returns the default IP subnet configured for Weave Net IP address allocation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ipinfo",
+                "defaultsubnet"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e51183bf-b34a-4677-9d39-75d8e5d50f79",
+              "name": "Default subnet returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ipinfo",
+                    "defaultsubnet"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "10.32.0.0/12",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://127.0.0.1:6784",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "cbb145dc-8000-4f00-aba9-bd9c693730e9",
+    "name": "Weave Net HTTP DNS IPAM API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.",
+      "type": "text/plain"
+    }
+  }
+}

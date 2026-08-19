@@ -1,0 +1,131 @@
+{
+  "item": [
+    {
+      "id": "4c9162b5-dda6-45fc-a244-ea2f064e8780",
+      "name": "Status",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e240b48c-30e4-4869-bf16-904cc21ae664",
+          "name": "Weave Net Get Status",
+          "request": {
+            "name": "Weave Net Get Status",
+            "description": {
+              "content": "Returns the status of the Weave Net daemon. Returns HTTP 200 when fully ready, or HTTP 503 (Service Unavailable) when starting up. Clients checking for readiness should accept both status codes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ef35bcb5-caa4-4f25-8da0-6ad8ec0ddc37",
+              "name": "Daemon is fully ready",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"version\": \"2.8.1\",\n  \"router\": {\n    \"encryption\": false,\n    \"peers\": []\n  },\n  \"ipam\": {\n    \"status\": \"ready\",\n    \"subnet\": \"10.32.0.0/12\"\n  },\n  \"dns\": {\n    \"domain\": \"weave.local.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "983aca6a-8546-48e1-bfa0-605e13d64108",
+              "name": "Daemon is starting up but not yet fully ready",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://127.0.0.1:6784",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "13cd9e97-8244-4548-83e3-80b2548b82d0",
+    "name": "Weave Net HTTP DNS Status API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.",
+      "type": "text/plain"
+    }
+  }
+}

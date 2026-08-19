@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weave Net HTTP DNS Peers API",
+    "version": "2.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Peers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Weave Net Connect to Peer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://127.0.0.1:6784/connect",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Connects to one or more remote Weave peers. Optionally replaces the current set of peers entirely when 'replace=true' is provided."
+        },
+        {
+          "info": {
+            "name": "Weave Net Remove Peer",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://127.0.0.1:6784/peer/:peerName",
+            "params": [
+              {
+                "name": "peerName",
+                "value": "10.0.1.5",
+                "type": "path",
+                "description": "Peer name or address"
+              }
+            ]
+          },
+          "docs": "Releases all IP space owned by the named peer and removes it from the peer list."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
