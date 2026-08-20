@@ -28,6 +28,14 @@ tags:
   - Kubernetes
   - Docker
   - IPAM
+  - Open-Source
+  - CNCF
+tags_raw:
+  - Containers
+  - Networking
+  - Kubernetes
+  - Docker
+  - IPAM
   - Open Source
   - CNCF
 url: https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/apis.yml
