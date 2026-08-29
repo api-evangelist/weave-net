@@ -7,6 +7,19 @@ description: >-
   daemon exposes a local HTTP API on port 6784 for programmatic network management. Weave Net is maintained by
   Weaveworks and is archived but remains widely used in production environments.
 type: Index
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: true
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: unknown
