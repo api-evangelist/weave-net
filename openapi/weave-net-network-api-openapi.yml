@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Weave Net HTTP DNS Network API
   description: The Weave Net HTTP API provides programmatic control over the Weave Net container networking daemon. It is exposed locally on port 6784 and allows management of IPAM (IP address allocation), peer connections, DNS registration, network exposure, and status monitoring. This API is used internally by the weave CLI and can be used by tooling that manages container network configuration.

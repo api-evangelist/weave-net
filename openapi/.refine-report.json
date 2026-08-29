@@ -17,6 +17,13 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "weave-net-dns-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "weave-net-ipam-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "weave-net-network-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "weave-net-peers-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "weave-net-status-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }
