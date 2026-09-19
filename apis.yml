@@ -87,6 +87,8 @@ apis:
   description: The Network API from Weave Net — 1 operation(s) for network.
   humanURL: https://github.com/weaveworks/weave
   tags:
+  - Networks
+  tags_raw:
   - Network
   properties:
   - type: OpenAPI
