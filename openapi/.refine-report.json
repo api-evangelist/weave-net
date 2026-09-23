@@ -1,11 +1,7 @@
 {
   "provider": "weave-net",
   "sources": [
-    "weave-net-dns-api-openapi.yml",
-    "weave-net-ipam-api-openapi.yml",
-    "weave-net-network-api-openapi.yml",
-    "weave-net-peers-api-openapi.yml",
-    "weave-net-status-api-openapi.yml"
+    "_ae-authored/weave-net-openapi.yml"
   ],
   "outputs": [
     "weave-net-dns-api-openapi.yml",
@@ -18,12 +14,20 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "weave-net-dns-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "weave-net-ipam-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "weave-net-network-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "weave-net-peers-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "weave-net-status-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "weave-net-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "weave-net-openapi.yml: declared missing tag: DNS",
+    "weave-net-openapi.yml: declared missing tag: IPAM",
+    "weave-net-openapi.yml: declared missing tag: Network",
+    "weave-net-openapi.yml: declared missing tag: Peers",
+    "weave-net-openapi.yml: declared missing tag: Status",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "weave-net-dns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weave-net-ipam-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weave-net-network-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weave-net-peers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weave-net-status-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
