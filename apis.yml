@@ -8,17 +8,20 @@ description: >-
   Weaveworks and is archived but remains widely used in production environments.
 type: Index
 deliveryModel:
-  model: unknown
+  model: saas
+  license_evidence:
+    not_product:
+    - weaveworks/weave
   open_source: unknown
   commercial: true
   callable_host: false
-  label: Delivery model not determined — needs a product licence on record
+  label: Hosted service · you call their endpoint
   confidence: low
   source:
   - openapi
   - pricing
-  - repository-unlicensed
-  generated: '2026-08-28'
+  - repository-not-product
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: freemium
@@ -41,7 +44,7 @@ tags:
   - Kubernetes
   - Docker
   - IPAM
-  - Open-Source
+  - Open Source
   - CNCF
 tags_raw:
   - Containers
@@ -51,6 +54,7 @@ tags_raw:
   - IPAM
   - Open Source
   - CNCF
+  - Open-Source
 url: https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/apis.yml
 created: '2026-03-26'
 modified: '2026-05-19'
