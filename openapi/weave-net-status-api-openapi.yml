@@ -51,71 +51,6 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    PeerInfo:
-      type: object
-      description: Information about a Weave peer
-      properties:
-        name:
-          type: string
-          description: Peer name (hex string)
-          example: 8a:3d:c1:f9:a2:b7
-        nick_name:
-          type: string
-          description: Human-readable peer nickname
-          example: node-1
-        connections:
-          type: array
-          description: List of connections from this peer
-          items:
-            $ref: '#/components/schemas/ConnectionInfo'
-    RouterStatus:
-      type: object
-      description: Status of the Weave Net router
-      properties:
-        encryption:
-          type: boolean
-          description: Whether encryption is enabled
-          example: false
-        peers:
-          type: array
-          description: List of connected peers
-          items:
-            $ref: '#/components/schemas/PeerInfo'
-        connections:
-          type: array
-          description: Active connections
-          items:
-            $ref: '#/components/schemas/ConnectionInfo'
-    ConnectionInfo:
-      type: object
-      description: Information about a peer connection
-      properties:
-        address:
-          type: string
-          description: Remote peer address
-          example: 10.0.1.5:6783
-        state:
-          type: string
-          description: Connection state
-          example: established
-        info:
-          type: string
-          description: Additional connection info
-          example: encrypted, sleeve
-    StatusResponse:
-      type: object
-      description: Current status of the Weave Net daemon
-      properties:
-        version:
-          type: string
-          description: Weave Net version
-          example: 2.8.1
-        router:
-          $ref: '#/components/schemas/RouterStatus'
-        ipam:
-          $ref: '#/components/schemas/IPAMStatus'
-        dns:
-          $ref: '#/components/schemas/DNSStatus'
     IPAMStatus:
       type: object
       description: Status of the IPAM subsystem
@@ -136,6 +71,38 @@ components:
           type: integer
           description: Number of IPs owned by this peer
           example: 524288
+    RouterStatus:
+      type: object
+      description: Status of the Weave Net router
+      properties:
+        encryption:
+          type: boolean
+          description: Whether encryption is enabled
+          example: false
+        peers:
+          type: array
+          description: List of connected peers
+          items:
+            $ref: '#/components/schemas/PeerInfo'
+        connections:
+          type: array
+          description: Active connections
+          items:
+            $ref: '#/components/schemas/ConnectionInfo'
+    StatusResponse:
+      type: object
+      description: Current status of the Weave Net daemon
+      properties:
+        version:
+          type: string
+          description: Weave Net version
+          example: 2.8.1
+        router:
+          $ref: '#/components/schemas/RouterStatus'
+        ipam:
+          $ref: '#/components/schemas/IPAMStatus'
+        dns:
+          $ref: '#/components/schemas/DNSStatus'
     DNSStatus:
       type: object
       description: Status of the WeaveDNS subsystem
@@ -149,3 +116,36 @@ components:
           description: Upstream DNS servers
           items:
             type: string
+    PeerInfo:
+      type: object
+      description: Information about a Weave peer
+      properties:
+        name:
+          type: string
+          description: Peer name (hex string)
+          example: 8a:3d:c1:f9:a2:b7
+        nick_name:
+          type: string
+          description: Human-readable peer nickname
+          example: node-1
+        connections:
+          type: array
+          description: List of connections from this peer
+          items:
+            $ref: '#/components/schemas/ConnectionInfo'
+    ConnectionInfo:
+      type: object
+      description: Information about a peer connection
+      properties:
+        address:
+          type: string
+          description: Remote peer address
+          example: 10.0.1.5:6783
+        state:
+          type: string
+          description: Connection state
+          example: established
+        info:
+          type: string
+          description: Additional connection info
+          example: encrypted, sleeve
