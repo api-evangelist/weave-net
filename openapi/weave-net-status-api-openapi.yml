@@ -51,6 +51,22 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
+    ConnectionInfo:
+      type: object
+      description: Information about a peer connection
+      properties:
+        address:
+          type: string
+          description: Remote peer address
+          example: 10.0.1.5:6783
+        state:
+          type: string
+          description: Connection state
+          example: established
+        info:
+          type: string
+          description: Additional connection info
+          example: encrypted, sleeve
     IPAMStatus:
       type: object
       description: Status of the IPAM subsystem
@@ -71,24 +87,6 @@ components:
           type: integer
           description: Number of IPs owned by this peer
           example: 524288
-    RouterStatus:
-      type: object
-      description: Status of the Weave Net router
-      properties:
-        encryption:
-          type: boolean
-          description: Whether encryption is enabled
-          example: false
-        peers:
-          type: array
-          description: List of connected peers
-          items:
-            $ref: '#/components/schemas/PeerInfo'
-        connections:
-          type: array
-          description: Active connections
-          items:
-            $ref: '#/components/schemas/ConnectionInfo'
     StatusResponse:
       type: object
       description: Current status of the Weave Net daemon
@@ -133,19 +131,21 @@ components:
           description: List of connections from this peer
           items:
             $ref: '#/components/schemas/ConnectionInfo'
-    ConnectionInfo:
+    RouterStatus:
       type: object
-      description: Information about a peer connection
+      description: Status of the Weave Net router
       properties:
-        address:
-          type: string
-          description: Remote peer address
-          example: 10.0.1.5:6783
-        state:
-          type: string
-          description: Connection state
-          example: established
-        info:
-          type: string
-          description: Additional connection info
-          example: encrypted, sleeve
+        encryption:
+          type: boolean
+          description: Whether encryption is enabled
+          example: false
+        peers:
+          type: array
+          description: List of connected peers
+          items:
+            $ref: '#/components/schemas/PeerInfo'
+        connections:
+          type: array
+          description: Active connections
+          items:
+            $ref: '#/components/schemas/ConnectionInfo'
