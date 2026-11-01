@@ -1,4 +1,4 @@
-# Weave Net (weave-net)
+# Weave Net
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,67 +66,138 @@
 
 Weave Net is an open source container networking plugin that creates a virtual network connecting Docker containers and Kubernetes pods across multiple hosts. It provides automatic IP address management (IPAM), DNS resolution via WeaveDNS, network policy enforcement, and optional encryption for container-to-container communication. The Weave Net daemon exposes a local HTTP API on port 6784 for programmatic network management. Weave Net is maintained by Weaveworks and is archived but remains widely used in production environments.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/weave-net/refs/heads/main/apis.yml)
+**Areas:** Containers · Networking · Kubernetes · Docker · IPAM · Open Source · CNCF
 
-## Scope
+## Weave Net on APIs.io
 
-- **Type:** Index
-- **Position:** Consumer
-- **Access:** 3rd-Party
+Everything profiled for Weave Net is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/weave-net/](https://apis.io/providers/weave-net/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (5)
 
-- Containers
-- Networking
-- Kubernetes
-- Docker
-- IPAM
-- Open Source
-- CNCF
+- [Weave Net DNS API](https://apis.io/apis/weave-net/weave-net-dns-api/) — The DNS API from Weave Net — 2 operation(s) for dns.
+- [Weave Net IPAM API](https://apis.io/apis/weave-net/weave-net-ipam-api/) — The IPAM API from Weave Net — 3 operation(s) for ipam.
+- [Weave Net Network API](https://apis.io/apis/weave-net/weave-net-network-api/) — The Network API from Weave Net — 1 operation(s) for network.
+- [Weave Net Peers API](https://apis.io/apis/weave-net/weave-net-peers-api/) — The Peers API from Weave Net — 2 operation(s) for peers.
+- [Weave Net Status API](https://apis.io/apis/weave-net/weave-net-status-api/) — The Status API from Weave Net — 1 operation(s) for status.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-03-26
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### Weave Net HTTP API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-The Weave Net local HTTP API exposed on port 6784 for managing container networking including IP address allocation (IPAM), peer connections, WeaveDNS registration, and network bridge exposure.
+- [Weave Net Agentic Access](https://apis.io/agentic-access/weave-net/weave-net-agentic-access/)
 
-- **Human URL:** [https://github.com/weaveworks/weave](https://github.com/weaveworks/weave)
+#### JSON Schema (7)
 
-#### Tags
+The data models the API reads and writes.
 
-- Containers
-- Networking
-- IPAM
-- DNS
+- [ConnectRequest](https://apis.io/schemas/weave-net/weave-net-connect-request/)
+- [ConnectionInfo](https://apis.io/schemas/weave-net/weave-net-connection-info/)
+- [DNSStatus](https://apis.io/schemas/weave-net/weave-net-dns-status/)
+- [IPAMStatus](https://apis.io/schemas/weave-net/weave-net-ipam-status/)
+- [PeerInfo](https://apis.io/schemas/weave-net/weave-net-peer-info/)
+- [RouterStatus](https://apis.io/schemas/weave-net/weave-net-router-status/)
+- [StatusResponse](https://apis.io/schemas/weave-net/weave-net-status-response/)
 
-#### Properties
+#### JSON Structure (7)
 
-- [OpenAPI](openapi/weave-net-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/weave-net.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/weave-net.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [Documentation](https://github.com/weaveworks/weave)
-- [API Reference](https://github.com/weaveworks/weave/tree/master/api)
+Data models expressed in JSON Structure.
 
-## Common Properties
+- [Weave Net Connect Request Structure](https://apis.io/json-structure/weave-net/weave-net-connect-request-structure/)
+- [Weave Net Connection Info Structure](https://apis.io/json-structure/weave-net/weave-net-connection-info-structure/)
+- [Weave Net Dns Status Structure](https://apis.io/json-structure/weave-net/weave-net-dns-status-structure/)
+- [Weave Net Ipam Status Structure](https://apis.io/json-structure/weave-net/weave-net-ipam-status-structure/)
+- [Weave Net Peer Info Structure](https://apis.io/json-structure/weave-net/weave-net-peer-info-structure/)
+- [Weave Net Router Status Structure](https://apis.io/json-structure/weave-net/weave-net-router-status-structure/)
+- [Weave Net Status Response Structure](https://apis.io/json-structure/weave-net/weave-net-status-response-structure/)
 
-- [LinkedIn](https://www.linkedin.com/company/weaveworks)
-- [GitHub Repository](https://github.com/weaveworks/weave)
-- [GitHub Organization](https://github.com/weaveworks)
-- [Terms of Service](https://github.com/weaveworks/weave/blob/master/LICENSE)
-- [Security](https://github.com/weaveworks/weave/blob/master/SECURITY.md)
-- [Changelog](https://github.com/weaveworks/weave/blob/master/CHANGELOG.md)
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Weave Net Context](https://apis.io/jsonld/weave-net/weave-net-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Weave Net Vocabulary](https://apis.io/vocabularies/weave-net/weave-net-vocabulary/)
+
+#### Examples (7)
+
+Example requests and responses.
+
+- [Weave Net Connect Request Example](https://apis.io/examples/weave-net/weave-net-connect-request-example/)
+- [Weave Net Connection Info Example](https://apis.io/examples/weave-net/weave-net-connection-info-example/)
+- [Weave Net Dns Status Example](https://apis.io/examples/weave-net/weave-net-dns-status-example/)
+- [Weave Net Ipam Status Example](https://apis.io/examples/weave-net/weave-net-ipam-status-example/)
+- [Weave Net Peer Info Example](https://apis.io/examples/weave-net/weave-net-peer-info-example/)
+- [Weave Net Router Status Example](https://apis.io/examples/weave-net/weave-net-router-status-example/)
+- [Weave Net Status Response Example](https://apis.io/examples/weave-net/weave-net-status-response-example/)
+
+#### Collections (6)
+
+Postman and Open Collection request collections.
+
+- [Weave Net HTTP API](https://apis.io/collections/weave-net/open-weave-net/)
+- [Weave Net HTTP DNS API](https://apis.io/collections/weave-net/open-weave-net-dns-api/)
+- [Weave Net HTTP DNS IPAM API](https://apis.io/collections/weave-net/open-weave-net-ipam-api/)
+- [Weave Net HTTP DNS Network API](https://apis.io/collections/weave-net/open-weave-net-network-api/)
+- [Weave Net HTTP DNS Peers API](https://apis.io/collections/weave-net/open-weave-net-peers-api/)
+- [Weave Net HTTP DNS Status API](https://apis.io/collections/weave-net/open-weave-net-status-api/)
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [Weave Net — jsonschema rules](https://apis.io/rules/weave-net/weave-net-jsonschema-spectral-rules/)
+- [Weave Net API Rules](https://apis.io/rules/weave-net/weave-net-spectral-rules/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Weave Net Plans Pricing](https://apis.io/plans/weave-net/weave-net-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Weave Net Rate Limits](https://apis.io/rate-limits/weave-net/weave-net-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Weave Net Finops](https://apis.io/finops/weave-net/weave-net-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Support](https://github.com/weaveworks/weave/issues)
-- [Spectral Rules](rules/weave-net-spectral-rules.yml)
-- [Vocabulary](vocabulary/weave-net-vocabulary.yml)
-- [Features](undefined)
-- [Use Cases](undefined)
+- [Changelog](https://github.com/weaveworks/weave/blob/master/CHANGELOG.md)
+- [Security](https://github.com/weaveworks/weave/blob/master/SECURITY.md)
+- [Terms of service](https://github.com/weaveworks/weave/blob/master/LICENSE)
+- [GitHub](https://github.com/weaveworks)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Unrated** — no public website could be reached for this company, so there was almost nothing to measure and nothing a reader could check.
+
+This is not a score of zero. No rating is published for this company. If that is wrong because something public exists that we missed, say so on this repository or email [info@apievangelist.com](mailto:info@apievangelist.com) and it will be re-run — free, and no justification needed.
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Weave Net: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/weave-net/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
